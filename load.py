@@ -82,6 +82,7 @@ def plugin_app(parent):
     # Override theme's foreground color
     #this.glyph_id = tk.Label(this.frame, text="Ready", foreground="green")
     this.glyph_id = tk.Label(this.frame, text="Ready")
+    this.systemName="systemName"
     this.system = tk.Label(this.frame, text="SystemName")
     this.submit = tk.Button(this.frame, text="Submit", foreground="green")
     this.dismiss = tk.Button(this.frame, text="Dismiss", foreground="red")
@@ -164,6 +165,7 @@ def test_show(event=None):
 
 
 def show(system):
+    this.system["text"]=system
     this.glyph.grid()
     this.ship.grid()
     this.glyph_id.grid()
@@ -187,8 +189,11 @@ def display():
     this.glyph["image"] = this.glyph_image
     this.ship["image"] = this.ship_image
 
+
     this.glyph_id["text"] = this.glyph_identity
     this.ship_label["text"] = this.interceptor
+    this.system["text"] = this.systemName
+
 
 
 def set_ship(type):
@@ -232,7 +237,11 @@ def get_edsm(system):
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     # this is what happens when you scan a goid
-    if entry.get("event") == "MaterialCollected" and entry.get("Name") in ("tg_shipflightdata", "unknownshipsignature"):
+
+    tgscanned=(entry.get("event") == "MaterialCollected" and entry.get("Name") in ("tg_shipflightdata", "unknownshipsignature"))
+    tgtest=(entry.get("event") == "SendText" and entry.get("Message") and entry.get("Message") == "test glyph scanner")
+
+    if tgscanned or tgtest:
         this.cmdr = cmdr
         this.systemName = system
 
