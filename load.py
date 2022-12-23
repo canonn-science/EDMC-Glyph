@@ -265,8 +265,10 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     if entry.get("event") == "Music":
         if entry.get("MusicTrack") in ("Combat_Unknown"):
             this.hostile = True
+            this.ship_label["fg"] = "red"
         else:
             this.hostile = False
+            this.ship_label["fg"] = "green"
 
     tgscanned = (entry.get("event") == "MaterialCollected" and entry.get(
         "Name") in ("tg_shipflightdata", "unknownshipsignature"))
