@@ -1,9 +1,5 @@
 import sys
-try:
-    import tkinter as tk
-except:
-    import Tkinter as tk
-
+import tkinter as tk
 from ttkHyperlinkLabel import HyperlinkLabel
 import webbrowser
 import requests
@@ -78,11 +74,12 @@ def plugin_app(parent):
 
     this.glyph = tk.Label(this.frame, text="Glyph:")
     this.ship = tk.Label(this.frame, text="Ship:")
+
     this.ship_label = tk.Label(this.frame, text="Ship:")
     # Override theme's foreground color
     #this.glyph_id = tk.Label(this.frame, text="Ready", foreground="green")
     this.glyph_id = tk.Label(this.frame, text="Ready")
-    this.systemName="systemName"
+    this.systemName = "systemName"
     this.system = tk.Label(this.frame, text="SystemName")
     this.submit = tk.Button(this.frame, text="Submit", foreground="green")
     this.dismiss = tk.Button(this.frame, text="Dismiss", foreground="red")
@@ -93,6 +90,7 @@ def plugin_app(parent):
 
     this.glyph.grid(row=0, column=0, sticky="NSEW")
     this.ship.grid(row=0, column=1, sticky="NSEW")
+
     this.glyph_id.grid(row=1, column=0, sticky="NSEW")
     this.ship_label.grid(row=1, column=1, sticky="NSEW")
 
@@ -103,6 +101,7 @@ def plugin_app(parent):
     this.ship.bind('<Button-1>', shipclick)
     this.glyph.bind('<Button-3>', rightclick)
     this.ship.bind('<Button-3>', shipclick)
+    this.ship_label.bind('<Button-1>', toggle_hostility)
     this.dismiss.bind('<Button-1>', hide)
     this.submit.bind('<Button-1>', glyph_submit)
     #this.title.bind('<Button-1>', test_show)
@@ -129,15 +128,28 @@ def plugin_app(parent):
     this.inner_value = next(this.inners)
     this.outer_value = next(this.outers)
 
+    this.hostile = False
+
     display()
     hide()
     return this.frame
 
 
+def toggle_hostility(event=None):
+    if this.hostile:
+        this.hostile = False
+    else:
+        this.hostile = True
+    display()
+
+
 def glyph_submit(event):
+    hostility = "Friendly"
+    if this.hostile:
+        hostility = "Hostile"
 
     url = "https://docs.google.com/forms/d/e/1FAIpQLSfv6uhfJtGuS9IizUaNO3VnX-t_AZX1DDnsRDT4Cxrj29n7Fw/formResponse?usp=pp_url"
-    params = f"&entry.1933517733={this.cmdr}&entry.896344291={this.systemName}&entry.1250600565={this.interceptor}&entry.302977208={this.id64}&entry.1507205151={this.x}&entry.554889217={this.y}&entry.743397442={this.z}&entry.245136015={this.glyph_identity}"
+    params = f"&entry.1933517733={this.cmdr}&entry.896344291={this.systemName}&entry.1250600565={this.interceptor}&entry.302977208={this.id64}&entry.1507205151={this.x}&entry.554889217={this.y}&entry.743397442={this.z}&entry.245136015={this.glyph_identity}&&entry.1226132342={hostility}"
 
     r = requests.get(url+params)
 
@@ -165,7 +177,7 @@ def test_show(event=None):
 
 
 def show(system):
-    this.system["text"]=system
+    this.system["text"] = system
     this.glyph.grid()
     this.ship.grid()
     this.glyph_id.grid()
@@ -184,16 +196,19 @@ def display():
     gif = f"{this.glyph_identity}.gif"
     this.glyph_image = tk.PhotoImage(
         file=os.path.join(this.plugin_dir, "images", gif))
+
+    this.ship_label["fg"] = "green"
+    if this.hostile:
+        this.ship_label["fg"] = "red"
+
     this.ship_image = tk.PhotoImage(file=os.path.join(
         this.plugin_dir, "images", f"{this.interceptor}.gif"))
     this.glyph["image"] = this.glyph_image
     this.ship["image"] = this.ship_image
 
-
     this.glyph_id["text"] = this.glyph_identity
     this.ship_label["text"] = this.interceptor
     this.system["text"] = this.systemName
-
 
 
 def set_ship(type):
@@ -237,7 +252,7 @@ def get_edsm(system):
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     # this is what happens when you scan a goid
-    tgnames={
+    tgnames = {
         "$Codex_Ent_Basilisk_Name;": "Basilisk",
         "$Codex_Ent_Orthrus_Name;": "Orthrus",
         "$Codex_Ent_Cyclops_Name;": "Cyclops",
@@ -245,10 +260,18 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         "$Codex_Ent_Medusa_Name;": "Medusa"
     }
 
+    if entry.get("event") == "Music":
+        if entry.get("MusicTrack") in ("Combat_Unknown"):
+            this.hostile = True
+        else:
+            this.hostile = False
 
-    tgscanned=(entry.get("event") == "MaterialCollected" and entry.get("Name") in ("tg_shipflightdata", "unknownshipsignature"))
-    tgtest=(entry.get("event") == "SendText" and entry.get("Message") and entry.get("Message") == "test glyph scanner")
-    tgcomp=(entry.get("event") == "CodexEntry" and tgnames.get(entry.get("Name")) )
+    tgscanned = (entry.get("event") == "MaterialCollected" and entry.get(
+        "Name") in ("tg_shipflightdata", "unknownshipsignature"))
+    tgtest = (entry.get("event") == "SendText" and entry.get(
+        "Message") and entry.get("Message") == "test glyph scanner")
+    tgcomp = (entry.get("event") ==
+              "CodexEntry" and tgnames.get(entry.get("Name")))
 
     if tgscanned or tgtest or tgcomp:
         this.cmdr = cmdr
