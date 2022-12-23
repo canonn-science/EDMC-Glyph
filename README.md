@@ -3,7 +3,7 @@ EDMC Plugin to capture thargoid glyph data
 
 # Usage
 
-The Glyph scanner will remain dormant until you use the xeno scanner to scan a Thargoid interceptor and the Thargoid Glyph appears on your hud.
+The Glyph scanner will remain dormant until you use the xeno scanner to scan a Thargoid interceptor and get a material entry in your journal. There seems to be an issue where materials are not being dropped currently, however if you bind your composition scanner and your xeno scanner to the same key you then the composition scanner will also trigger the UI if it detects a Thargoid Interceptor.
 
 ![Glyph User Interface](docimages/glyphui.png)
 

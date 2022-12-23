@@ -237,13 +237,24 @@ def get_edsm(system):
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     # this is what happens when you scan a goid
+    tgnames={
+        "$Codex_Ent_Basilisk_Name;": "Basilisk",
+        "$Codex_Ent_Orthrus_Name;": "Orthrus",
+        "$Codex_Ent_Cyclops_Name;": "Cyclops",
+        "$Codex_Ent_Hydra_Name;": "Hydra",
+        "$Codex_Ent_Medusa_Name;": "Medusa"
+    }
+
 
     tgscanned=(entry.get("event") == "MaterialCollected" and entry.get("Name") in ("tg_shipflightdata", "unknownshipsignature"))
     tgtest=(entry.get("event") == "SendText" and entry.get("Message") and entry.get("Message") == "test glyph scanner")
+    tgcomp=(entry.get("event") == "CodexEntry" and tgnames.get(entry.get("Name")) )
 
-    if tgscanned or tgtest:
+    if tgscanned or tgtest or tgcomp:
         this.cmdr = cmdr
         this.systemName = system
+        if tgcomp:
+            set_ship(tgnames.get(entry.get("Name")))
 
         edsm = get_edsm(system)
         this.x, this.y, this.z = edsm.get("coords").values()
