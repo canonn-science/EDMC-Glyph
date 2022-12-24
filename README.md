@@ -23,6 +23,7 @@ Once you have made your selections you can click the submit button and it will s
 * id64 
 * The Interceptor Type
 * The glyph identification code.
+* Hostile | Friendly
 
 
 
