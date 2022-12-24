@@ -151,7 +151,7 @@ def glyph_submit(event):
         this.ship_label["fg"] = "red"
 
     url = "https://docs.google.com/forms/d/e/1FAIpQLSfv6uhfJtGuS9IizUaNO3VnX-t_AZX1DDnsRDT4Cxrj29n7Fw/formResponse?usp=pp_url"
-    params = f"&entry.1933517733={this.cmdr}&entry.896344291={this.systemName}&entry.1250600565={this.interceptor}&entry.302977208={this.id64}&entry.1507205151={this.x}&entry.554889217={this.y}&entry.743397442={this.z}&entry.245136015={this.glyph_identity}&&entry.1226132342={hostility}"
+    params = f"&entry.1933517733={this.cmdr}&entry.896344291={this.systemName}&entry.1250600565={this.interceptor}&entry.302977208={this.id64}&entry.1507205151={this.x}&entry.554889217={this.y}&entry.743397442={this.z}&entry.245136015='{this.glyph_identity}&&entry.1226132342={hostility}"
 
     r = requests.get(url+params)
 
