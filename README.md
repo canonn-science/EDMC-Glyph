@@ -5,7 +5,7 @@ EDMC Plugin to capture thargoid glyph data
 
 The Glyph scanner will remain dormant until you use the xeno scanner to scan a Thargoid interceptor and get a material entry in your journal. There seems to be an issue where materials are not being dropped consistently, however if you bind your composition scanner and your xeno scanner to the same key, then the composition scanner will also trigger the UI if it detects a Thargoid Interceptor.
 
-![Glyph User Interface](docimages/glyphui.png)
+![Glyph User Interface](images/docs/glyphui.png)
 
 Left clicking on the displyed glyph will cycle through the inner markings. The thargoid image next to it will switch to an the known type for the selected inner glyph.
 
@@ -24,8 +24,6 @@ Once you have made your selections you can click the submit button and it will s
 * The Interceptor Type
 * The glyph identification code.
 * Hostile | Friendly
-
-
 
 The captured data can be found at [Thargoid Glyph Sheet](https://canonn.fyi/glyphsheet)
 
