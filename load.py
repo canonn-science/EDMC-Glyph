@@ -165,6 +165,7 @@ def plugin_app(parent):
     this.interceptors = cycle([
         "Cyclops",
         "Basilisk",
+        "Glaive",
         "Medusa",
         "Hydra",
         "Orthrus"
@@ -287,7 +288,8 @@ def innernext(event):
     if this.inner_value in [4, 5, 6]:
         set_ship("Medusa")
     if this.inner_value in [7, 8, 9]:
-        set_ship("Basilisk")
+        if this.interceptor != "Glaive":
+            set_ship("Basilisk")
     if this.inner_value in [10]:
         set_ship("Hydra")
     if this.inner_value in [11]:
@@ -303,7 +305,8 @@ def innerprev(event):
     if this.inner_value in [4, 5, 6]:
         set_ship("Medusa")
     if this.inner_value in [7, 8, 9]:
-        set_ship("Basilisk")
+        if this.interceptor != "Glaive":
+            set_ship("Basilisk")
     if this.inner_value in [10]:
         set_ship("Hydra")
     if this.inner_value in [11]:
@@ -343,6 +346,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     # this is what happens when you scan a goid
     tgnames = {
         "$Codex_Ent_Basilisk_Name;": "Basilisk",
+        "$Codex_Ent_Glaive_Name;": "Glaive",
         "$Codex_Ent_Orthrus_Name;": "Orthrus",
         "$Codex_Ent_Cyclops_Name;": "Cyclops",
         "$Codex_Ent_Hydra_Name;": "Hydra",
@@ -350,7 +354,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     }
 
     if entry.get("event") == "Music":
-        if entry.get("MusicTrack") in ("Combat_Unknown"):
+        if entry.get("MusicTrack") in ("Combat_Unknown", "Combat_Dogfight", "Combat_Hunters"):
             this.hostile = True
             this.ship_label["fg"] = "red"
         else:
